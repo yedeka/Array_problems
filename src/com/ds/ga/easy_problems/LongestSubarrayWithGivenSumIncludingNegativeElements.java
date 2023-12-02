@@ -7,6 +7,8 @@ import java.util.Map;
  * This approach varies from the regular 2 pointer approach is such a way that we are calculating sum over all the elements since negatives are possible.
  * Hence instead of 2 pointer approach we use a prefix sum approach here where we maintain a HashMap of prefix sum and at every element we keep on checking
  * for the remainder of the sum in the prefix array to find the difference.
+ * Special mention of TC here -> Worst Case TC for HashMap will be O(N) in case of a poor hash function which results in lots of collisions. So we might have
+ * a TC of O(N^2) instead of O(N).
  */
 public class LongestSubarrayWithGivenSumIncludingNegativeElements {
     private static int findLongestSubArrayIncludingNegatives(int[] input, int k) {
@@ -40,6 +42,5 @@ public class LongestSubarrayWithGivenSumIncludingNegativeElements {
         input = new int[]{0, 2, 0, 3};
         k = 3;
         System.out.println("Length of longest subarray with sum = "+k+" => "+findLongestSubArrayIncludingNegatives(input, k));
-
     }
 }
