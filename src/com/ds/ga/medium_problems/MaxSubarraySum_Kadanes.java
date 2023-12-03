@@ -15,18 +15,35 @@ package com.ds.ga.medium_problems;
  */
 public class MaxSubarraySum_Kadanes {
     private static int findMaxSubArraySum(int[] input) {
-        int result = Integer.MIN_VALUE, sum = 0;
+        int result = Integer.MIN_VALUE, sum = 0, startingIndex = -1, endingIndex = -1, start = -1;
         for(int i=0; i<input.length; i++) {
+            if(sum == 0) {
+                start = i;
+            }
             sum += input[i];
             if (sum < 0) {
                 sum = 0;
             }
-            result = Math.max(result, sum);
+            if(sum > result) {
+                startingIndex = start;
+                endingIndex = i;
+                result = sum;
+            }
+        }
+        if(0 != result) {
+            // Printing the subarray yielding maximum sum
+            String maxSumElements = "";
+            for(int i= startingIndex; i<=endingIndex; i++) {
+                maxSumElements += input[i]+", ";
+            }
+            System.out.println(maxSumElements);
         }
         return result;
     }
     public static void main(String[] args) {
         int[] input = new int[]{-2, -3, 4, -1, -2, 1, 5, -3};
+        System.out.println("Maximum sub array sum => "+findMaxSubArraySum(input));
+        input = new int[]{-4, -2, -3, -1};
         System.out.println("Maximum sub array sum => "+findMaxSubArraySum(input));
     }
 }
