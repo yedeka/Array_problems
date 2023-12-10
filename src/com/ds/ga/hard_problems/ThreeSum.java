@@ -62,6 +62,9 @@ public class ThreeSum {
             int j = i+1;
             int k = size - 1;
             while(j < k) {
+                // We dont get sorted order if j and K cross so we dont consider the elements where j crosses k.
+                // This also takes care of the condition of i reaching to n-2 or n-1 in that case k and j will not be valid indices but it will come up as a situation
+                // such that either j == k for i = n-2 and j > k for i == n-1 we can successfully avoid that situation with just the j < k condition.
                 int sum = input[i] + input[j] + input[k];
                 if(sum < 0) {
                     j++;
