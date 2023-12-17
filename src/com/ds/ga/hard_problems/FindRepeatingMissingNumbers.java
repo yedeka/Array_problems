@@ -33,6 +33,14 @@ package com.ds.ga.hard_problems;
  * Now X^2 - Y^2 = (x+y)*(x-y) and we already have X - Y hence if we divide X^2 - Y^2 with X - Y we get X + Y.
  * Since we have 2 equations X - Y and X + Y we can solve these equations to find values of X and Y.
  *
+ * Optimal approach 2 - XOR approach. This is done in multiple steps
+ * Step 1 - Take XOR of all the array elements with the first n natural numbers.
+ * Step 2 - Find the first differentiating bit from right in the number obtained in step 1.
+ * Step 3 - Now split the array numbers into 2 groups where the numbers belonging the the firs differentiating bit position have 1 at that place and the numbers
+ * having 0 at the differentiating bit position.
+ * Step 4 - Again take XOR of those 2 groups within themselves (Not with each other)
+ * Step 5 - This will yield 2 numbers and then we take one number and check for that number in the array. If the number is found it is the repeating nunber
+ * and if the number is not found it is the missing number.
  */
 public class FindRepeatingMissingNumbers {
     private static boolean validateInput(int[] input) {
@@ -62,9 +70,67 @@ public class FindRepeatingMissingNumbers {
         result[1] = missingNumber;
         return result;
     }
+
+    private static int[] findRepeatingMissingNumberXOR(int[] input) {
+        int[] result = new int[2];
+        if(!validateInput(input)) {
+            return result;
+        }
+        int length = input.length;
+        int originalXor = 0;
+        //Step 1 - XOR array elements and first n natural numbers.
+        for(int i=0; i<length; i++) {
+            originalXor ^= input[i];
+            originalXor ^= i+1;
+        }
+        // Step 2 - Find first LSB bit differentiating between the two component of XOR numbers
+        int bitNum = 0;
+        while(true){
+            if((originalXor & 1<<bitNum) != 0){
+                break;
+            }
+        }
+        //Step 3 - Distinguish the numbers in 2 sets having 0 at bitNum and having 1 at bitNum.
+        int zeroXOR = 0;
+        int oneXOR = 0;
+        for(int i=0; i<length; i++) {
+            if((input[i] & (1 <<bitNum)) == 1) {
+                oneXOR ^= input[i];
+            } else {
+                zeroXOR ^= input[i];
+            }
+        }
+        for(int i=0; i<length; i++) {
+            if((i+1 & (1 <<bitNum)) == 1) {
+                oneXOR ^= i+1;
+            } else {
+                zeroXOR ^= i+1;
+            }
+        }
+
+        //Step 4 - Now take either zero or oneXor number and search for the same. If it is found then it is the repeating number and if it is not found then
+        // it is the missing number
+        int count = 0;
+        for(int i=0; i<length; i++) {
+            if(input[i] == oneXOR) {
+                count += 1;
+                break;
+            }
+        }
+        if(count != 0) {
+            result[0] = oneXOR;
+            result[1] = zeroXOR;
+        } else {
+            result[0] = zeroXOR;
+            result[1] = oneXOR;
+        }
+        return result;
+    }
     public static void main(String[] args) {
        int[] input = new int[] {3,1,2,5,4,6,7,5};
        int[] result = findRepeatingNMissingNumbers(input);
        System.out.println("Repeating and missing numbers in given input are ["+result[0]+", "+result[1]+"]");
+       result = findRepeatingMissingNumberXOR(input);
+        System.out.println("Repeating and missing numbers in given input using XOR are ["+result[0]+", "+result[1]+"]");
     }
 }
