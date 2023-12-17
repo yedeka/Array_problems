@@ -26,8 +26,9 @@ import java.util.Arrays;
  * TC - Max[O(n), O(m)] + max(O(nlogn), (mlogm))
  * SC - O(1)
  *
- * Second better solution - Uses gap method as used in shell sort. Use 2 pointer technique with a gap of math.ceil(m+n/2). keep on reducing the gap everytime by Math.ceil(gap/2) and keep sorting the array in those
- * gaps.
+ * Second better solution - Uses gap method as used in shell sort. Use 2 pointer technique with a gap of math.ceil(m+n/2). keep on reducing the gap everytime by Math.ceil(gap/2) and keep swapping the elements at pointer
+ * left and right if element at left > element at right.
+ * TC - O(log(n+m)) * O(n+m) since everytime the gap is reduced by half.
  */
 public class MergeTwoSortedArrays {
     private static int[] mergeSortedArraysBrute(int[] arr1, int[] arr2) {
