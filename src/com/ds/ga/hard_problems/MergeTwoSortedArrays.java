@@ -25,6 +25,9 @@ import java.util.Arrays;
  * As step 2 sort both arrays to ensure the swapped elements are at their right place.
  * TC - Max[O(n), O(m)] + max(O(nlogn), (mlogm))
  * SC - O(1)
+ *
+ * Second better solution - Uses gap method as used in shell sort. Use 2 pointer technique with a gap of math.ceil(m+n/2). keep on reducing the gap everytime by Math.ceil(gap/2) and keep sorting the array in those
+ * gaps.
  */
 public class MergeTwoSortedArrays {
     private static int[] mergeSortedArraysBrute(int[] arr1, int[] arr2) {
@@ -67,8 +70,43 @@ public class MergeTwoSortedArrays {
         //Step 2 - Sort both the arrays
         Arrays.sort(arr1);
         Arrays.sort(arr2);
-
         return;
+    }
+
+    private static void mergeSortArraysBetter2(int[] arr1, int[] arr2) {
+        int length1 = arr1.length, length2 = arr2.length, length = length1 + length2;
+        //Another way of ceil here is (length1 + length2 /2) + (length1+length2) % 2
+        int gap = length / 2 + length % 2;
+        while(gap > 0 ) {
+            int left = 0;
+            int right = gap + left;
+            while(right < length) {
+                if(left < length1 && right >= length1) { // left in first array and right in second array
+                    int actualRight = right-length1;
+                    if(arr1[left] > arr2[actualRight]){
+                        swapElementsIn2Arrays(arr1, left, arr2, actualRight);
+                    }
+                } else if(left >= length1) { // Left and right both in the second array, since right is always left + gap meaning greater than left;
+                    // if left is in the second array, right will automatically be in the second array.
+                    int actualLeft = left-length1;
+                    int actualRight = right - length1;
+                    if(arr2[actualLeft] > arr2[actualRight]) {
+                        swapElementsIn2Arrays(arr2, actualLeft, arr2, actualRight);
+                    }
+                } else if (right < length1) { // Both left and right are in arr1. Since right = left + gap if right is in arr1 it indicates that left is also in arr1
+                    if(arr1[left] > arr1[right]) {
+                        swapElementsIn2Arrays(arr1, left, arr1, right);
+                    }
+                }
+                left++;
+                right++;
+            }
+            if(gap == 1) {
+                break;
+            } else {
+                gap = gap / 2 + gap % 2;
+            }
+        }
     }
 
     private static void swapElementsIn2Arrays(int[] arr1, int i, int[] arr2, int j) {
@@ -97,5 +135,10 @@ public class MergeTwoSortedArrays {
         mergeSortedArraysBetter(arr1, arr2);
         System.out.println("Rearranged Arrays => "+printArray(arr1)+" AND "+printArray(arr2));
         System.out.println("Done with Better approach");
+        arr1 = new int[]{1, 3, 5, 7};
+        arr2 = new int[]{0, 2, 3, 6, 8, 9};
+        mergeSortArraysBetter2(arr1, arr2);
+        System.out.println("Rearranged Arrays => "+printArray(arr1)+" AND "+printArray(arr2));
+        System.out.println("Done with second better approach");
     }
 }
