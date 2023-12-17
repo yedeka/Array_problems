@@ -25,7 +25,9 @@ public class MergeTwoSortedArrays {
         int length1 = arr1.length;
         int length2 = arr2.length;
         int[] result = new int[length1 + length2];
+        int resultLength = length1 + length2;
         int i = 0, j=0, k=0;
+        // Step 1 - Adding all the sorted elements into a third array
         while(i < length1 && j < length2) {
             if(arr1[i] <= arr2[j]) {
                 result[k++] = arr1[i++];
@@ -39,6 +41,14 @@ public class MergeTwoSortedArrays {
         while(j< length2) {
             result[k++] = arr1[j++];
         }
+        //Step 2 - Iterate over the third array and distribute the elements in two arrays
+        for(i=0; i< resultLength; i++) {
+           if(i < length1) {
+               arr1[i] = result[i];
+           } else {
+               arr2[i-length1] = result[i];
+           }
+        }
         return result;
     }
 
@@ -47,14 +57,15 @@ public class MergeTwoSortedArrays {
         for(int element: input) {
             strElements += element+", ";
         }
-        strElements+= "]";
-        return strElements;
+        String formattedString = strElements.substring(0, strElements.length()-2)+ " ]";
+        return formattedString;
     }
     public static void main(String[] args) {
         int[] arr1 = new int[]{1, 4, 8, 10};
         int arr2[] = new int[]{2, 3, 9};
         int[] merged = mergeSortedArraysBrute(arr1, arr2);
         System.out.println("Merged Array => "+printArray(merged));
+        System.out.println("Rearranged Arrays => "+printArray(arr1)+" AND "+printArray(arr2));
         System.out.println("DONE");
     }
 }
