@@ -99,15 +99,12 @@ public class FindRepeatingMissingNumbers {
             } else {
                 zeroXOR ^= input[i];
             }
-        }
-        for(int i=0; i<length; i++) {
             if((i+1 & (1 <<bitNum)) == 1) {
                 oneXOR ^= i+1;
             } else {
                 zeroXOR ^= i+1;
             }
         }
-
         //Step 4 - Now take either zero or oneXor number and search for the same. If it is found then it is the repeating number and if it is not found then
         // it is the missing number
         int count = 0;
