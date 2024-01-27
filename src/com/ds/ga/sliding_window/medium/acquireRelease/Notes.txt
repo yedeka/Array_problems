@@ -1,0 +1,7 @@
+Acquire release strategy
+Used in sliding window problems where the window length is variable. This means that we will
+have to change the sliding window based on some condition. Best example for this is Maximum
+consecutive Ones III problem of leetcode. This is done by keeping 2 pointers right and left.
+left pointer is the one which is at an index that is released and right pointer is
+the one that is about to be acquired and we should always have a valid window between left+1
+and right - 1. Initialize left at -1 and right at 0. Size of window is i-1-j
